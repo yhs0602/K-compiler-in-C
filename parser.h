@@ -33,7 +33,7 @@ public:
         RECORD,
         RECORDLOOKUP,
         RECORDASSIGN,
-        ID,
+        TYPE_ID,
         ADD,
         SUB,
         MUL,
@@ -55,22 +55,27 @@ public:
 };
 
 
-class ID;
-
-class Assign : Node {
+class ID : public Node {
 public:
-    Assign(class ID *to, Node *value) : Node(Node::ASSIGN), to(to), value(value) {}
+    ID(string value) : Node(Node::TYPE_ID), value(std::move(value)) {}
 
-    class ID *to;
-
-    Node *value;
+    string value;
 };
 
-class Sequence : Node {
+class Assign : public Node {
 public:
-    Sequence(Node *e1, Node *e2) : Node(Node::SEQ), e1(e1), e2(e2) {}
+    Assign(shared_ptr<ID> to, shared_ptr<Node> value) : Node(Node::ASSIGN), to(to), value(value) {}
 
-    Node *e1, *e2;
+    shared_ptr<ID> to;
+
+    shared_ptr<Node> value;
+};
+
+class Sequence : public Node {
+public:
+    Sequence(shared_ptr<Node> e1, shared_ptr<Node> e2) : Node(Node::SEQ), e1(e1), e2(e2) {}
+
+    shared_ptr<Node> e1, e2;
 };
 
 
@@ -85,7 +90,14 @@ private:
 
     int parse_unit(std::vector<Token>::iterator begin, std::vector<Token>::iterator end, shared_ptr<Node> &pNode);
 
-    int parse_expression(std::vector<Token>::iterator begin, std::vector<Token>::iterator end, std::shared_ptr<Node> &pNode);
+    int parse_sequence(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> &pNode);
+
+    int parse_expression(std::vector<Token>::iterator begin, std::vector<Token>::iterator end,
+                         std::shared_ptr<Node> &pNode);
+
+    int parse_assign(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode);
+
+    int parse_id(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<ID> pNode);
 };
 
 

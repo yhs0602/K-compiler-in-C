@@ -10,6 +10,8 @@
 #include <fstream>
 #include <utility>
 
+using namespace std;
+
 class Token {
 public:
     enum Type {
