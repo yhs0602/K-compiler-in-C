@@ -1,5 +1,5 @@
 #include "lexer.h"
-#include "parser2.h"
+#include "parser.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     std::istream &is = ifs.is_open() ? static_cast<std::istream &>(ifs) : test_data;
     Lexer lexer(is);
     lexer.lex(onNewToken);
-    parser2 parser(tokens);
+    parser parser(tokens);
 
 //    // use is here
 //    for (std::string word; is >> word;) {
