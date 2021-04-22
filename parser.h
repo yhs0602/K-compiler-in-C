@@ -6,8 +6,18 @@
 #define KCOMPILERINC_PARSER_H
 
 
-class parser {
+#include <utility>
+#include <vector>
+#include "lexer.h"
 
+class Parser {
+public:
+    Parser(std::vector<Token> tokens) : _tokens(std::move(tokens)) {}
+
+    void parse();
+
+private:
+    std::vector<Token> _tokens;
 };
 
 

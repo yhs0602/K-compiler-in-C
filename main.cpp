@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     std::istream &is = ifs.is_open() ? static_cast<std::istream &>(ifs) : test_data;
     Lexer lexer(is);
     lexer.lex(onNewToken);
-    parser parser(tokens);
+    Parser parser(tokens);
 
 //    // use is here
 //    for (std::string word; is >> word;) {
