@@ -15,12 +15,41 @@ public:
     enum Type {
         ID,
         NUM,
-        OP
+        OP,
+        LPAR,
+        RPAR,
+        SEMICOLON,
+        ASSIGN,
+        GT,
+        LT,
+        CLPAR,
+        CRPAR,
+        COMMA,
+        PLUS,
+        MINUS,
+        STAR,
+        SLASH,
+        DOT,
+        EQ,
+        UNIT,
+        IF,
+        THEN,
+        ELSE,
+        WHILE,
+        DO,
+        READ,
+        WRITE,
+        LET,
+        IN,
+        PROC,
+        BTRUE,
+        BFALSE,
+        NOT
     };
 
-    Token(std::string raw, Type type) : raw(std::move(raw)), type(type) {}
+    Token(std::string raw, Type type);
 
-    std::string get_raw();
+    string get_raw();
 
     Type get_type();
 

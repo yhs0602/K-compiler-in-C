@@ -82,7 +82,7 @@ bool Lexer::is_num_char(char i) {
 }
 
 bool Lexer::is_op_char(char i) {
-    return strchr(":+=.()[]*/-\"\\\'", i) != nullptr;
+    return strchr(":+=.()[]*/-\"\\\';", i) != nullptr;
 //    return i == ':' || i == '+' || i == '=' || i == '.';
 }
 
@@ -116,4 +116,70 @@ std::ostream &operator<<(std::ostream &os, const Token &token) {
 
 Token::Type Token::get_type() {
     return type;
+}
+
+Token::Token(std::string raw, Token::Type type) : raw(std::move(raw)), type(type) {
+    if (type == OP) {
+        if (raw == ";") {
+            type = SEMICOLON;
+        } else if (raw == "(") {
+            type = LPAR;
+        } else if (raw == ")") {
+            type = RPAR;
+        } else if (raw == ":=") {
+            type = ASSIGN;
+        } else if (raw == "<") {
+            type = GT;
+        } else if (raw == ">") {
+            type = LT;
+        } else if (raw == "{") {
+            type = CLPAR;
+        } else if (raw == "}") {
+            type = CRPAR;
+        } else if (raw == ",") {
+            type = COMMA;
+        } else if (raw == "+") {
+            type = PLUS;
+        } else if (raw == "-") {
+            type = MINUS;
+        } else if (raw == "*") {
+            type = STAR;
+        } else if (raw == "/") {
+            type = SLASH;
+        } else if (raw == ".") {
+            type = DOT;
+        } else if (raw == "=") {
+            type = EQ;
+        }
+    } else if (type == ID) {
+        if (raw == "unit") {
+            type = UNIT;
+        } else if (raw == "if") {
+            type = IF;
+        } else if (raw == "then") {
+            type = THEN;
+        } else if (raw == "else") {
+            type = ELSE;
+        } else if (raw == "while") {
+            type = WHILE;
+        } else if (raw == "DO") {
+            type = DO;
+        } else if (raw == "READ") {
+            type = READ;
+        } else if (raw == "WRITE") {
+            type = WRITE;
+        } else if (raw == "let") {
+            type = LET;
+        } else if (raw == "in") {
+            type = IN;
+        } else if (raw == "proc") {
+            type = PROC;
+        } else if (raw == "true") {
+            type = BTRUE;
+        } else if (raw == "false") {
+            type = BFALSE;
+        } else if (raw == "not") {
+            type = NOT;
+        }
+    }
 }
