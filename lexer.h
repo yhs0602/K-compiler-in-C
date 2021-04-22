@@ -33,7 +33,9 @@ typedef void (*token_receiver)(Token token);
 
 class Lexer {
 public:
-    explicit Lexer(std::istream &buf, token_receiver reciver);
+    explicit Lexer(std::istream &buf) : _buf(buf) {}
+
+    void lex(token_receiver receiver);
 
 private:
     std::istream &_buf;
@@ -49,7 +51,7 @@ private:
 
     bool is_white_char(char i);
 
-    void emit_token(Token token);
+//    void emit_token(Token token);
 
     Token::Type TokenTypeOf(char state);
 };

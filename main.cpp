@@ -1,7 +1,9 @@
 #include "lexer.h"
+#include "parser2.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 #include <algorithm>
 
 using namespace std;
@@ -31,9 +33,13 @@ __dead2 void error(char *str) {
     exit(-1);
 }
 
+vector<Token> tokens;
+
 void onNewToken(Token token) {
     std::cout << "token: " << token << std::endl;
+    tokens.push_back(token);
 }
+
 
 int main(int argc, char **argv) {
     std::string filename = argv[1] ? argv[1] : "";
@@ -54,8 +60,9 @@ int main(int argc, char **argv) {
 
     // if we have an open file bind to it else bind to test_data
     std::istream &is = ifs.is_open() ? static_cast<std::istream &>(ifs) : test_data;
-
-    Lexer lexer(is, onNewToken);
+    Lexer lexer(is);
+    lexer.lex(onNewToken);
+    parser2 parser(tokens);
 
 //    // use is here
 //    for (std::string word; is >> word;) {

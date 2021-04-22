@@ -4,7 +4,7 @@
 
 #include "lexer.h"
 #include <iostream>
-#include <ctype.h>
+#include <cctype>
 #include <cstring>
 
 const int STATE_NO = 0;
@@ -26,11 +26,11 @@ char transitions[4][4] = {
         {STATE_ID, STATE_NU, STATE_OP, STATE_NO}, // op
 };
 
-Lexer::Lexer(std::istream &buf, token_receiver receiver) : _buf(buf), receiver(receiver) {
+void Lexer::lex(token_receiver receiver) {
     typedef std::istreambuf_iterator<char> buf_iter;
     std::string token;
     char state = 0;
-    for (buf_iter i(buf), e; i != e; ++i) {
+    for (buf_iter i(_buf), e; i != e; ++i) {
         char event = STATE_NO;
         if (is_id_start_char(*i)) {
             event = EVENT_ID;
@@ -57,7 +57,7 @@ Lexer::Lexer(std::istream &buf, token_receiver receiver) : _buf(buf), receiver(r
             token += *i;
         } else {
             if (state != STATE_NO)
-                emit_token(Token(token, TokenTypeOf(state)));
+                receiver(Token(token, TokenTypeOf(state)));
             state = newstate;
             token = *i;
         }
@@ -90,9 +90,9 @@ bool Lexer::is_white_char(char i) {
     return isspace(i);
 }
 
-void Lexer::emit_token(Token token) {
-    receiver(token);
-}
+//void Lexer::emit_token(Token token) {
+//    receiver(token);
+//}
 
 Token::Type Lexer::TokenTypeOf(char state) {
     switch (state) {
