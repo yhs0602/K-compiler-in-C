@@ -113,3 +113,7 @@ std::ostream &operator<<(std::ostream &os, const Token &token) {
     os << "type: " << token.type << " raw: " << token.raw;
     return os;
 }
+
+Token::Type Token::get_type() {
+    return type;
+}

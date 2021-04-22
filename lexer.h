@@ -22,6 +22,8 @@ public:
 
     std::string get_raw();
 
+    Type get_type();
+
     friend std::ostream &operator<<(std::ostream &os, const Token &token);
 
 private:
