@@ -9,6 +9,7 @@
 #include <utility>
 #include <vector>
 #include <memory>
+#include <ostream>
 #include "lexer.h"
 
 using namespace std;
@@ -46,6 +47,11 @@ public:
     Node(Type type) : type(type) {}
 
     Type type;
+
+    friend ostream &operator<<(ostream &os, const Node &node) {
+        os << "type: " << node.type;
+        return os;
+    }
 };
 
 
@@ -98,6 +104,8 @@ private:
     int parse_assign(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode);
 
     int parse_id(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<ID> pNode);
+
+    int parse_comment(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode);
 };
 
 

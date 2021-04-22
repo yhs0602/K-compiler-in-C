@@ -13,6 +13,7 @@ shared_ptr<Node> Parser::parse() {
 }
 
 int Parser::parse_sequence(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> &pNode) {
+    cout << "Parse_sequence" << endl;
     int tmp;
 
     shared_ptr<Node> child;
@@ -32,6 +33,7 @@ int Parser::parse_sequence(vector<Token>::iterator begin, vector<Token>::iterato
 
 
 int Parser::parse_expression(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> &pNode) {
+    cout << "Parse_expression" << endl;
     int tmp;
     shared_ptr<Node> tmpNode;
     tmp = parse_unit(begin, end, tmpNode);
@@ -44,13 +46,22 @@ int Parser::parse_expression(vector<Token>::iterator begin, vector<Token>::itera
         pNode = tmpNode;
         return tmp;
     }
-    tmp = parse_id(begin, end, pNode);
 
+    tmp = parse_comment(begin, end, tmpNode);
+    if (tmp > 0) {
+        shared_ptr<Node> tmpNode2;
+        int tmp2 = parse_expression(begin + tmp, end, tmpNode2);
+        if (tmp2 > 0) {
+            pNode = tmpNode2;
+            return tmp + tmp2;
+        }
+    }
 
     return 0;
 }
 
 int Parser::parse_unit(std::vector<Token>::iterator begin, std::vector<Token>::iterator end, shared_ptr<Node> &pNode) {
+    cout << "Parse_unit" << endl;
     if (begin->get_type() == Token::ID) {
         string raw = begin->get_raw();
         if (raw == "unit") {
@@ -62,6 +73,7 @@ int Parser::parse_unit(std::vector<Token>::iterator begin, std::vector<Token>::i
 }
 
 int Parser::parse_assign(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode) {
+    cout << "Parse_assign" << endl;
     int tmp;
     shared_ptr<ID> tmpNode;
     tmp = parse_id(begin, end, tmpNode);
@@ -80,9 +92,24 @@ int Parser::parse_assign(vector<Token>::iterator begin, vector<Token>::iterator 
 }
 
 int Parser::parse_id(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<ID> pNode) {
+    cout << "parse_id" << endl;
     if (begin->get_type() == Token::ID) {
         pNode = make_shared<ID>(begin->get_raw());
         return 1;
+    }
+    return 0;
+}
+
+int Parser::parse_comment(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode) {
+    cout << "parse_comment" << endl;
+    int cnt = 1;
+    cout << "Begin type :" << begin->get_type() << endl;
+    if (begin->get_type() == Token::LCOMMENT) {
+        while ((begin + cnt)->get_type() != Token::RCOMMENT) {
+            cout << "Comment: " << (begin + cnt)->get_raw() << ";;";
+            cnt++;
+        }
+        return cnt;
     }
     return 0;
 }

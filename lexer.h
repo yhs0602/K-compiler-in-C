@@ -46,7 +46,9 @@ public:
         PROC,
         BTRUE,
         BFALSE,
-        NOT
+        NOT,
+        LCOMMENT,
+        RCOMMENT
     };
 
     Token(std::string raw, Type type);

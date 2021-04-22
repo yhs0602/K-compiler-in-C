@@ -118,7 +118,8 @@ Token::Type Token::get_type() {
     return type;
 }
 
-Token::Token(std::string raw, Token::Type type) : raw(std::move(raw)), type(type) {
+Token::Token(std::string r, Token::Type t) : raw(std::move(r)) {
+    type = t;
     if (type == OP) {
         if (raw == ";") {
             type = SEMICOLON;
@@ -150,6 +151,10 @@ Token::Token(std::string raw, Token::Type type) : raw(std::move(raw)), type(type
             type = DOT;
         } else if (raw == "=") {
             type = EQ;
+        } else if (raw == "(*") {
+            type = LCOMMENT;
+        } else if (raw == "*)") {
+            type = RCOMMENT;
         }
     } else if (type == ID) {
         if (raw == "unit") {
