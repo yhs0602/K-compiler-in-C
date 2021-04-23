@@ -14,7 +14,7 @@
 
 using namespace std;
 
-class Node {
+class Expression {
 public:
     enum Type {
         BASE,
@@ -44,117 +44,118 @@ public:
         NOT
     };
 
-    Node(Type type) : type(type) {}
+    Expression(Type type) : type(type) {}
 
     Type type;
 
-    friend ostream &operator<<(ostream &os, const Node &node) {
+    friend ostream &operator<<(ostream &os, const Expression &node) {
         os << "type: " << node.type;
         return os;
     }
 };
 
+class LeftTerm : public Expression {
 
-class Unit : public Node {
+};
+
+class Add : public LeftTerm {
+
+};
+
+class Unit : public Expression {
 public:
-    Unit() : Node(Node::UNIT) {}
+    Unit() : Expression(Expression::UNIT) {}
 };
 
 
-class ID : public Node {
+class ID : public Expression {
 public:
-    ID(string value) : Node(Node::TYPE_ID), value(std::move(value)) {}
+    ID(string value) : Expression(Expression::TYPE_ID), value(std::move(value)) {}
 
     string value;
 };
 
-class Assign : public Node {
+class Assign : public Expression {
 public:
-    Assign(shared_ptr<ID> to, shared_ptr<Node> value) : Node(Node::ASSIGN), to(to), value(value) {}
+    Assign(shared_ptr<ID> to, shared_ptr<Expression> value) : Expression(Expression::ASSIGN), to(to), value(value) {}
 
     shared_ptr<ID> to;
 
-    shared_ptr<Node> value;
+    shared_ptr<Expression> value;
 };
 
-class Sequence : public Node {
+class Sequence : public Expression {
 public:
-    Sequence(shared_ptr<Node> e1, shared_ptr<Node> e2) : Node(Node::SEQ), e1(e1), e2(e2) {}
+    Sequence(shared_ptr<Expression> e1, shared_ptr<Expression> e2) : Expression(Expression::SEQ), e1(e1), e2(e2) {}
 
-    shared_ptr<Node> e1, e2;
+    shared_ptr<Expression> e1, e2;
 
     friend ostream &operator<<(ostream &os, const Sequence &sequence) {
-        os << static_cast<const Node &>(sequence) << " e1: " << sequence.e1 << " e2: " << sequence.e2;
+        os << static_cast<const Expression &>(sequence) << " e1: " << sequence.e1 << " e2: " << sequence.e2;
         return os;
     }
 };
 
 
-class LetV : public Node {
+class LetV : public Expression {
 public:
-    LetV(shared_ptr<ID> to, shared_ptr<Node> what, shared_ptr<Node> then) : Node(Node::LETV), to(to), what(what),
-                                                                            then(then) {}
+    LetV(shared_ptr<ID> to, shared_ptr<Expression> what, shared_ptr<Expression> then) : Expression(Expression::LETV),
+                                                                                        to(to), what(what),
+                                                                                        then(then) {}
 
     shared_ptr<ID> to;
 
     friend ostream &operator<<(ostream &os, const LetV &v) {
-        os << static_cast<const Node &>(v) << " to: " << v.to << " what: " << v.what << " then: " << v.then;
+        os << static_cast<const Expression &>(v) << " to: " << v.to << " what: " << v.what << " then: " << v.then;
         return os;
     }
 
-    shared_ptr<Node> what;
-    shared_ptr<Node> then;
+    shared_ptr<Expression> what;
+    shared_ptr<Expression> then;
 };
 
 
-class Num : public Node {
+class Num : public Expression {
 public:
-    explicit Num(int value) : Node(Node::NUM), value(value) {}
+    explicit Num(int value) : Expression(Expression::NUM), value(value) {}
 
     int value;
 };
 
-class Write : public Node {
+class Write : public Expression {
 public:
-    explicit Write(shared_ptr<Node> v) : Node(Node::WRITE), v(v) {}
+    explicit Write(shared_ptr<Expression> v) : Expression(Expression::WRITE), v(v) {}
 
-    shared_ptr<Node> v;
-};
-
-class Add : public Node {
-public:
-    Add(shared_ptr<Node> v1, shared_ptr<Node> v2) : Node(Node::ADD), v1(v1), v2(v2) {}
-
-    shared_ptr<Node> v1, v2;
+    shared_ptr<Expression> v;
 };
 
 class Parser {
 public:
     Parser(std::vector<Token> tokens) : _tokens(std::move(tokens)) {}
 
-    shared_ptr<Node> parse();
+    shared_ptr<Expression> parse();
 
 private:
     std::vector<Token> _tokens;
 
-    int parse_unit(std::vector<Token>::iterator begin, std::vector<Token>::iterator end, shared_ptr<Node> &pNode);
+    int parse_unit(std::vector<Token>::iterator begin, std::vector<Token>::iterator end, shared_ptr<Expression> &pNode);
 
-    int parse_sequence(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> &pNode);
+    int parse_sequence(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> &pNode);
 
     int parse_expression(std::vector<Token>::iterator begin, std::vector<Token>::iterator end,
-                         std::shared_ptr<Node> &pNode);
+                         std::shared_ptr<Expression> &pNode);
 
-    int parse_assign(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode);
+    int parse_assign(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode);
 
     int parse_id(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<ID> pNode);
 
-    int parse_comment(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode);
+    int parse_comment(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode);
 
-    int parse_let(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode);
+    int parse_let(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode);
 
-    int parse_number(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode);
+    int parse_number(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode);
 
-    int parse_write(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Node> pNode);
+    int parse_write(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode);
 
     int parse_add(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Add> pNode);
 };

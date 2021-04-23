@@ -167,11 +167,11 @@ Token::Token(std::string r, Token::Type t) : raw(std::move(r)) {
             type = ELSE;
         } else if (raw == "while") {
             type = WHILE;
-        } else if (raw == "DO") {
+        } else if (raw == "do") {
             type = DO;
-        } else if (raw == "READ") {
+        } else if (raw == "read") {
             type = READ;
-        } else if (raw == "WRITE") {
+        } else if (raw == "write") {
             type = WRITE;
         } else if (raw == "let") {
             type = LET;

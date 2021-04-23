@@ -63,9 +63,9 @@ int main(int argc, char **argv) {
     Lexer lexer(is);
     lexer.lex(onNewToken);
     Parser parser(tokens);
-    shared_ptr<Node> parsed = parser.parse();
-    cout << endl << "End" << endl;
-    cout << parsed << endl;
+    shared_ptr<Expression> parsed = parser.parse();
+    cout << "End parsed: " << endl;
+    cout << *parsed << endl;
 
 //    // use is here
 //    for (std::string word; is >> word;) {
