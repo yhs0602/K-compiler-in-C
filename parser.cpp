@@ -230,7 +230,7 @@ int Parser::parse_add(vector<Token>::iterator begin, vector<Token>::iterator end
             shared_ptr<Expression> tmpNode2;
             int tmp2 = parse_expression(begin + tmp + 1, end, tmpNode2);
             if (tmp2 > 0) {
-                pNode = make_shared<Add>(tmpNode1, tmpNode2);
+//                pNode = make_shared<Add>(tmpNode1, tmpNode2);
                 return tmp + 1 + tmp2;
             }
         }
