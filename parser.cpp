@@ -47,12 +47,12 @@ int Parser::parse_expression(vector<Token>::iterator begin, vector<Token>::itera
     int tmp;
     shared_ptr<Expression> tmpNode;
 
-    shared_ptr<Add> addNode;
-    tmp = parse_add(begin, end, addNode);
-    if (tmp > 0) {
-        pNode = addNode;
-        return tmp;
-    }
+//    shared_ptr<Add> addNode;
+//    tmp = parse_add(begin, end, addNode);
+//    if (tmp > 0) {
+//        pNode = addNode;
+//        return tmp;
+//    }
 
 
     tmp = parse_unit(begin, end, tmpNode);
@@ -67,17 +67,17 @@ int Parser::parse_expression(vector<Token>::iterator begin, vector<Token>::itera
         return tmp;
     }
 
-    tmp = parse_comment(begin, end, tmpNode);
-    if (tmp > 0) {
-        shared_ptr<Expression> tmpNode2;
-        int tmp2 = parse_expression(begin + tmp, end, tmpNode2);
-        if (tmp2 > 0) {
-            pNode = tmpNode2;
-            return tmp + tmp2;
-        } else {
-            return 0;
-        }
-    }
+//    tmp = parse_comment(begin, end, tmpNode);
+//    if (tmp > 0) {
+//        shared_ptr<Expression> tmpNode2;
+//        int tmp2 = parse_expression(begin + tmp, end, tmpNode2);
+//        if (tmp2 > 0) {
+//            pNode = tmpNode2;
+//            return tmp + tmp2;
+//        } else {
+//            return 0;
+//        }
+//    }
 
     tmp = parse_number(begin, end, tmpNode);
     if (tmp > 0) {
@@ -121,7 +121,7 @@ int Parser::parse_unit(std::vector<Token>::iterator begin, std::vector<Token>::i
     return 0;
 }
 
-int Parser::parse_assign(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode) {
+int Parser::parse_assign(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> &pNode) {
 //    cout << "Parse_assign" << endl;
     int tmp;
     shared_ptr<ID> tmpNode;
@@ -140,7 +140,7 @@ int Parser::parse_assign(vector<Token>::iterator begin, vector<Token>::iterator 
     return 0;
 }
 
-int Parser::parse_id(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<ID> pNode) {
+int Parser::parse_id(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<ID> &pNode) {
 //    cout << "parse_id" << endl;
     if (begin->get_type() == Token::ID) {
         pNode = make_shared<ID>(begin->get_raw());
@@ -149,7 +149,7 @@ int Parser::parse_id(vector<Token>::iterator begin, vector<Token>::iterator end,
     return 0;
 }
 
-int Parser::parse_comment(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode) {
+int Parser::parse_comment(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> &pNode) {
 //    cout << "parse_comment" << *begin << endl;
     int cnt = 1;
     if (begin->get_type() == Token::LCOMMENT) {
@@ -163,7 +163,7 @@ int Parser::parse_comment(vector<Token>::iterator begin, vector<Token>::iterator
     return 0;
 }
 
-int Parser::parse_let(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode) {
+int Parser::parse_let(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> &pNode) {
     if (begin->get_type() == Token::LET) {
         cout << "Parse let" << endl;
         cout << "is let" << endl;
@@ -197,7 +197,7 @@ int Parser::parse_let(vector<Token>::iterator begin, vector<Token>::iterator end
     return 0;
 }
 
-int Parser::parse_number(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode) {
+int Parser::parse_number(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> &pNode) {
 //    cout << "parse_number" << endl;
     if (begin->get_type() == Token::NUM) {
         cout << "Number" << endl;
@@ -209,7 +209,7 @@ int Parser::parse_number(vector<Token>::iterator begin, vector<Token>::iterator 
     return 0;
 }
 
-int Parser::parse_write(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> pNode) {
+int Parser::parse_write(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Expression> &pNode) {
     if (begin->get_type() == Token::WRITE) {
         cout << "write" << endl;
         shared_ptr<Expression> tmpNode;
@@ -222,7 +222,7 @@ int Parser::parse_write(vector<Token>::iterator begin, vector<Token>::iterator e
     return 0;
 }
 
-int Parser::parse_add(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Add> pNode) {
+int Parser::parse_add(vector<Token>::iterator begin, vector<Token>::iterator end, shared_ptr<Add> &pNode) {
     shared_ptr<Expression> tmpNode1;
     int tmp = parse_expression(begin, end, tmpNode1);
     if (tmp > 0) {
@@ -231,7 +231,7 @@ int Parser::parse_add(vector<Token>::iterator begin, vector<Token>::iterator end
             int tmp2 = parse_expression(begin + tmp + 1, end, tmpNode2);
             if (tmp2 > 0) {
 //                pNode = make_shared<Add>(tmpNode1, tmpNode2);
-                return tmp + 1 + tmp2;
+//                return tmp + 1 + tmp2;
             }
         }
     }

@@ -34,8 +34,18 @@ __dead2 void error(char *str) {
 }
 
 vector<Token> tokens;
+bool inComment = false;
 
 void onNewToken(Token token) {
+    if (inComment) {
+        if (token.get_type() == Token::Type::RCOMMENT) {
+            inComment = false;
+        }
+        return;
+    } else if (token.get_type() == Token::Type::LCOMMENT) {
+        inComment = true;
+        return;
+    }
     std::cout << "token: " << token << std::endl;
     tokens.push_back(token);
 }

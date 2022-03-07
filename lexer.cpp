@@ -82,7 +82,7 @@ bool Lexer::is_num_char(char i) {
 }
 
 bool Lexer::is_op_char(char i) {
-    return strchr(":+=.()[]*/-\"\\\';", i) != nullptr;
+    return strchr(R"(:+=.()[]*/-"\';)", i) != nullptr;
 //    return i == ':' || i == '+' || i == '=' || i == '.';
 }
 

@@ -76,19 +76,19 @@ private:
     std::istream &_buf;
     token_receiver receiver;
 
-    bool is_id_start_char(char i);
+    static bool is_id_start_char(char i);
 
-    bool is_id_mid_char(char i);
+    static bool is_id_mid_char(char i);
 
-    bool is_num_char(char i);
+    static bool is_num_char(char i);
 
-    bool is_op_char(char i);
+    static bool is_op_char(char i);
 
-    bool is_white_char(char i);
+    static bool is_white_char(char i);
 
 //    void emit_token(Token token);
 
-    Token::Type TokenTypeOf(char state);
+    static Token::Type TokenTypeOf(char state);
 };
 
 
